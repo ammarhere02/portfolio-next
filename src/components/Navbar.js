@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { HiMenu, HiX } from "react-icons/hi";
 import dynamic from 'next/dynamic';
 
 // Dynamically import Canvas to avoid SSR issues
@@ -138,10 +139,21 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const [scrolled, setScrolled] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState("up");
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 50);
+
+      // Determine scroll direction
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setScrollDirection("down");
+      } else {
+        setScrollDirection("up");
+      }
+      setLastScrollY(currentScrollY);
 
       // Update active section based on scroll position
       const sections = navLinks.map(link => link.href.substring(1));
@@ -175,97 +187,90 @@ export default function Navbar() {
       <motion.nav
           className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
               scrolled
-                  ? "bg-background/90 backdrop-blur-md border-b border-primary/20 shadow-lg"
+                  ? "glass-effect border-b border-primary/20 shadow-2xl"
                   : "bg-transparent"
-          }`}
+          } ${scrollDirection === "down" && scrolled ? "-translate-y-full" : "translate-y-0"}`}
           initial={{ y: -100 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
           {/* Enhanced Logo */}
           <motion.a
               href="#hero"
-              className="font-black text-xl tracking-tight text-primary hover:text-primary transition-colors duration-300 relative group"
+              className="font-black text-2xl tracking-tight text-gradient hover:scale-105 transition-all duration-300 relative group"
               onClick={(e) => {
                 e.preventDefault();
                 handleLinkClick("#hero");
               }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
           >
-            <span className="relative z-10">Ammar Khan</span>
+            <span className="relative z-10 bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
+              Ammar Khan
+            </span>
             <motion.div
-                className="absolute inset-0 bg-primary/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+                className="absolute -inset-2 bg-primary/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-sm"
                 layoutId="logo-bg"
             />
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
-            <div className="flex gap-6">
+          <div className="hidden lg:flex items-center gap-12">
+            <div className="flex gap-8">
               {navLinks.map((link) => (
                   <motion.a
                       key={link.name}
                       href={link.href}
-                      className={`relative font-medium transition-colors duration-300 group ${
+                      className={`nav-link relative font-semibold text-lg transition-all duration-300 group ${
                           activeSection === link.href.substring(1)
-                              ? "text-primary"
-                              : "text-foreground/80 hover:text-primary"
+                              ? "text-primary active"
+                              : "text-foreground/70 hover:text-primary"
                       }`}
                       onClick={(e) => {
                         e.preventDefault();
                         handleLinkClick(link.href);
                       }}
-                      whileHover={{ y: -2 }}
+                      whileHover={{ y: -3, scale: 1.05 }}
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   >
                     {link.name}
-                    <motion.span
-                        className="absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300"
-                        initial={{ width: 0 }}
-                        animate={{
-                          width: activeSection === link.href.substring(1) ? "100%" : 0
-                        }}
-                    />
-                    <motion.span
-                        className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary/50 group-hover:w-full transition-all duration-300"
-                        initial={{ width: 0 }}
-                    />
                   </motion.a>
               ))}
             </div>
 
             {/* Social Links */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               {[
                 {
                   href: "https://github.com/ammarhere02",
                   icon: FaGithub,
                   label: "GitHub",
-                  color: "hover:text-gray-300"
+                  color: "hover:text-gray-300",
+                  bg: "hover:bg-gray-900/20"
                 },
                 {
                   href: "https://linkedin.com/in/ammar-khan-7b656822a/",
                   icon: FaLinkedin,
                   label: "LinkedIn",
-                  color: "hover:text-blue-400"
+                  color: "hover:text-blue-400",
+                  bg: "hover:bg-blue-900/20"
                 }
-              ].map(({ href, icon: Icon, label, color }) => (
+              ].map(({ href, icon: Icon, label, color, bg }) => (
                   <motion.a
                       key={href}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`text-xl transition-all duration-300 ${color} relative group`}
+                      className={`text-2xl transition-all duration-300 ${color} ${bg} relative group p-3 rounded-full`}
                       aria-label={label}
-                      whileHover={{ scale: 1.2, y: -2 }}
+                      whileHover={{ scale: 1.3, y: -3 }}
                       whileTap={{ scale: 0.95 }}
                   >
                     <Icon />
                     <motion.div
-                        className="absolute -inset-2 bg-primary/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
-                        whileHover={{ scale: 1.2 }}
+                        className="absolute -inset-3 bg-primary/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-sm"
+                        whileHover={{ scale: 1.4 }}
                     />
                   </motion.a>
               ))}
@@ -276,25 +281,22 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <motion.button
-              className="lg:hidden p-2 hover:bg-accent rounded-lg transition-colors duration-300 relative"
+              className="lg:hidden p-3 glass-card hover:bg-primary/10 rounded-xl transition-all duration-300 relative group"
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Toggle menu"
               whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
           >
-            <div className="flex flex-col gap-1.5 w-6">
-              {[0, 1, 2].map((index) => (
-                  <motion.span
-                      key={index}
-                      className="block h-0.5 bg-primary transition-all duration-300"
-                      animate={{
-                        rotate: isOpen ? (index === 1 ? 0 : index === 0 ? 45 : -45) : 0,
-                        y: isOpen ? (index === 1 ? 0 : index === 0 ? 6 : -6) : 0,
-                        opacity: isOpen && index === 1 ? 0 : 1,
-                      }}
-                      transition={{ duration: 0.3 }}
-                  />
-              ))}
-            </div>
+            <motion.div
+                animate={{ rotate: isOpen ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+            >
+              {isOpen ? (
+                  <HiX className="w-6 h-6 text-primary" />
+              ) : (
+                  <HiMenu className="w-6 h-6 text-primary" />
+              )}
+            </motion.div>
           </motion.button>
         </div>
 
@@ -302,30 +304,31 @@ export default function Navbar() {
         <AnimatePresence>
           {isOpen && (
               <motion.div
-                  className="lg:hidden bg-background/95 backdrop-blur-md border-t border-primary/20"
+                  className="lg:hidden glass-effect border-t border-primary/20 shadow-2xl"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
               >
-                <div className="px-4 py-6 space-y-4">
+                <div className="px-6 py-8 space-y-6">
                   {navLinks.map((link, index) => (
                       <motion.a
                           key={link.name}
                           href={link.href}
-                          className={`block py-3 px-4 rounded-lg font-medium transition-all duration-300 ${
+                          className={`block py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 ${
                               activeSection === link.href.substring(1)
-                                  ? "text-primary bg-primary/10 border-l-4 border-primary"
-                                  : "text-foreground/80 hover:text-primary hover:bg-accent"
+                                  ? "text-primary glass-card border-l-4 border-primary shadow-neon"
+                                  : "text-foreground/80 hover:text-primary hover:bg-primary/10"
                           }`}
                           onClick={(e) => {
                             e.preventDefault();
                             handleLinkClick(link.href);
                           }}
-                          initial={{ opacity: 0, x: -20 }}
+                          initial={{ opacity: 0, x: -30 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.1 }}
-                          whileTap={{ scale: 0.98 }}
+                          whileTap={{ scale: 0.95 }}
+                          whileHover={{ x: 10 }}
                       >
                         {link.name}
                       </motion.a>
@@ -333,32 +336,38 @@ export default function Navbar() {
 
                   {/* Mobile Social Links */}
                   <motion.div
-                      className="flex gap-6 pt-4 border-t border-accent/30"
+                      className="flex gap-8 pt-6 border-t border-primary/20 justify-center"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.4 }}
                   >
                     {[
-                      { href: "https://github.com/ammarhere02", icon: FaGithub, label: "GitHub" },
-                      { href: "https://linkedin.com/in/ammar-khan-7b656822a/", icon: FaLinkedin, label: "LinkedIn" }
-                    ].map(({ href, icon: Icon, label }) => (
+                      { href: "https://github.com/ammarhere02", icon: FaGithub, label: "GitHub", color: "hover:text-gray-300" },
+                      { href: "https://linkedin.com/in/ammar-khan-7b656822a/", icon: FaLinkedin, label: "LinkedIn", color: "hover:text-blue-400" }
+                    ].map(({ href, icon: Icon, label, color }) => (
                         <motion.a
                             key={href}
                             href={href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-2xl text-foreground/70 hover:text-primary transition-colors duration-300"
+                            className={`text-3xl text-foreground/70 ${color} transition-all duration-300 p-4 glass-card rounded-full`}
                             aria-label={label}
-                            whileHover={{ scale: 1.1 }}
+                            whileHover={{ scale: 1.2, y: -5 }}
                             whileTap={{ scale: 0.95 }}
                         >
                           <Icon />
                         </motion.a>
                     ))}
+                  </motion.div>
 
-                    <div className="ml-auto">
-                      <Enhanced3DThemeToggler />
-                    </div>
+                  {/* Mobile Theme Toggle */}
+                  <motion.div
+                      className="flex justify-center pt-4"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                  >
+                    <Enhanced3DThemeToggler />
                   </motion.div>
                 </div>
               </motion.div>

@@ -1,7 +1,62 @@
 "use client";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaArrowDown } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+// Floating particles component
+function FloatingParticles() {
+  return (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+            <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-primary/30 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  y: [-20, 20, -20],
+                  x: [-10, 10, -10],
+                  opacity: [0.3, 0.8, 0.3],
+                }}
+                transition={{
+                  duration: 3 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                }}
+            />
+        ))}
+      </div>
+  );
+}
+
+// Typing animation component
+function TypingAnimation({ text, className }) {
+  const [displayText, setDisplayText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, text]);
+
+  return (
+      <span className={className}>
+      {displayText}
+        <motion.span
+            animate={{ opacity: [1, 0, 1] }}
+            transition={{ duration: 1, repeat: Infinity }}
+            className="inline-block w-0.5 h-8 bg-primary ml-1"
+        />
+    </span>
+  );
+}
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -59,6 +114,7 @@ const glowVariants = {
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const heroRef = useRef(null);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -72,154 +128,218 @@ export default function Hero() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const scrolled = window.scrollY;
+        const rate = scrolled * -0.5;
+        heroRef.current.style.transform = `translateY(${rate}px)`;
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
       <section
+          ref={heroRef}
           id="hero"
-          className="relative w-full min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
+          className="relative w-full min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-gradient-to-br from-background via-accent to-secondary"
           style={{
-            background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(57, 255, 20, 0.03) 0%, transparent 50%)`
+            background: `
+              radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+              linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)
+            `
           }}
       >
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary rounded-full animate-pulse opacity-60" />
-          <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-primary rounded-full animate-pulse opacity-40 animation-delay-1000" />
-          <div className="absolute top-1/2 left-3/4 w-1.5 h-1.5 bg-primary rounded-full animate-pulse opacity-50 animation-delay-2000" />
-        </div>
+        <FloatingParticles />
+
+        {/* Enhanced Background Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
 
         <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="relative z-10 flex flex-col items-center gap-6 max-w-4xl mx-auto px-4"
+            className="relative z-10 flex flex-col items-center gap-8 max-w-5xl mx-auto px-4"
         >
           {/* Enhanced Profile Avatar */}
           <motion.div
               variants={itemVariants}
-              animate="animate"
               className="relative group"
               onHoverStart={() => setIsHovered(true)}
               onHoverEnd={() => setIsHovered(false)}
           >
             <motion.div
-                variants={glowVariants}
-                animate="animate"
-                className="w-40 h-40 rounded-full bg-gradient-to-br from-accent to-secondary border-4 border-primary flex items-center justify-center relative overflow-hidden group-hover:scale-110 transition-all duration-500"
+                className="w-48 h-48 rounded-full glass-card border-4 border-primary/50 flex items-center justify-center relative overflow-hidden group-hover:scale-110 transition-all duration-500"
+                animate={{
+                  boxShadow: [
+                    "0 0 20px rgba(139, 92, 246, 0.3)",
+                    "0 0 40px rgba(139, 92, 246, 0.5)",
+                    "0 0 20px rgba(139, 92, 246, 0.3)"
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
             >
               {/* Animated background gradient */}
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-primary/20 animate-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-primary/20 animate-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-spin" style={{ animationDuration: '8s' }} />
 
               <motion.span
-                  className="text-6xl font-bold text-primary relative z-10 select-none"
+                  className="text-7xl font-bold text-gradient relative z-10 select-none"
                   animate={isHovered ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 A
               </motion.span>
 
-              {/* Floating particles */}
+              {/* Enhanced floating particles */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <div className="absolute top-4 right-4 w-1 h-1 bg-primary rounded-full animate-ping" />
-                <div className="absolute bottom-6 left-6 w-0.5 h-0.5 bg-primary rounded-full animate-ping animation-delay-500" />
+                {[...Array(8)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute w-1 h-1 bg-primary rounded-full"
+                        style={{
+                          top: `${20 + Math.random() * 60}%`,
+                          left: `${20 + Math.random() * 60}%`,
+                        }}
+                        animate={{
+                          scale: [0, 1, 0],
+                          opacity: [0, 1, 0],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          delay: i * 0.2,
+                        }}
+                    />
+                ))}
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Enhanced Name with Gradient Animation */}
+          {/* Enhanced Name with Typing Animation */}
           <motion.h1
               variants={itemVariants}
-              className="text-responsive-xl font-black tracking-tight mb-2 relative"
+              className="text-6xl md:text-7xl font-black tracking-tight mb-4 relative"
           >
-          <span className="bg-gradient-to-r from-primary via-green-300 to-primary bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
-            Muhammad Ammar Khan
-          </span>
+            <TypingAnimation
+                text="Muhammad Ammar Khan"
+                className="text-gradient bg-[length:200%_auto] animate-gradient"
+            />
 
             {/* Subtle underline effect */}
             <motion.div
-                className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"
+                className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"
                 initial={{ width: 0 }}
-                animate={{ width: "60%" }}
-                transition={{ delay: 1.5, duration: 1 }}
+                animate={{ width: "70%" }}
+                transition={{ delay: 2.5, duration: 1.2 }}
             />
           </motion.h1>
 
-          {/* Enhanced Title with Typing Effect */}
+          {/* Enhanced Title with Staggered Animation */}
           <motion.h2
               variants={itemVariants}
-              className="text-responsive-lg font-bold text-primary mb-6 relative"
+              className="text-2xl md:text-3xl font-bold mb-8 relative"
           >
-            <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1, duration: 0.5 }}
-            >
-              Software Engineer
-            </motion.span>
-            <span className="text-foreground/60 mx-2">|</span>
-            <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.3, duration: 0.5 }}
-            >
-              MERN Stack Developer
-            </motion.span>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <motion.span
+                  className="text-primary font-bold"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 3, duration: 0.6 }}
+              >
+                Software Engineer
+              </motion.span>
+              <motion.span
+                  className="text-foreground/40 text-3xl"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 3.3, duration: 0.4 }}
+              >
+                •
+              </motion.span>
+              <motion.span
+                  className="text-primary font-bold"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 3.6, duration: 0.6 }}
+              >
+                MERN Stack Developer
+              </motion.span>
+            </div>
           </motion.h2>
 
           {/* Enhanced Description */}
           <motion.div
               variants={itemVariants}
-              className="max-w-2xl text-responsive-md text-foreground/80 mb-8 leading-relaxed"
+              className="max-w-3xl text-lg md:text-xl text-foreground/80 mb-12 leading-relaxed text-center"
           >
-            <motion.span
-                className="font-bold text-primary"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 400 }}
-            >
-              Hi, I'm Ammar!
-            </motion.span>
-            {" "}I craft modern web applications, build scalable backend systems, and develop AI-powered solutions.
-            <motion.span
-                className="inline-block ml-2 text-primary"
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            >
-              Let's create something extraordinary together! ✨
-            </motion.span>
+            <div className="glass-card p-8">
+              <motion.span
+                  className="font-bold text-primary text-2xl"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+              >
+                Hi, I'm Ammar!
+              </motion.span>
+              <br />
+              <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 4, duration: 0.8 }}
+                  className="text-lg"
+              >
+                I craft modern web applications, build scalable backend systems, and develop AI-powered solutions.
+              </motion.span>
+              <br />
+              <motion.span
+                  className="inline-block mt-4 text-primary font-semibold"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    rotate: [0, 2, -2, 0]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+              >
+                Let's create something extraordinary together! ✨
+              </motion.span>
+            </div>
           </motion.div>
 
           {/* Enhanced Social Links */}
           <motion.div
               variants={itemVariants}
-              className="flex gap-8 justify-center mb-8"
+              className="flex gap-8 justify-center mb-12"
           >
             {[
               {
                 href: "https://github.com/ammarhere02",
                 icon: FaGithub,
                 label: "GitHub Profile",
-                color: "hover:text-gray-300"
+                color: "hover:text-gray-300",
+                bg: "hover:bg-gray-900"
               },
               {
                 href: "https://linkedin.com/in/ammar-khan-7b656822a/",
                 icon: FaLinkedin,
                 label: "LinkedIn Profile",
-                color: "hover:text-blue-400"
+                color: "hover:text-blue-400",
+                bg: "hover:bg-blue-900"
               }
-            ].map(({ href, icon: Icon, label, color }) => (
+            ].map(({ href, icon: Icon, label, color, bg }) => (
                 <motion.a
                     key={href}
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`text-3xl transition-all duration-300 ${color} relative group`}
+                    className={`text-4xl transition-all duration-300 ${color} relative group p-4 rounded-full glass-card ${bg}`}
                     aria-label={label}
-                    whileHover={{ scale: 1.2, y: -5 }}
+                    whileHover={{ scale: 1.2, y: -8 }}
                     whileTap={{ scale: 0.95 }}
                 >
                   <Icon />
                   <motion.div
-                      className="absolute -inset-2 bg-primary/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
-                      whileHover={{ scale: 1.2 }}
+                      className="absolute -inset-4 bg-primary/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl"
+                      whileHover={{ scale: 1.5 }}
                   />
                 </motion.a>
             ))}
@@ -229,21 +349,21 @@ export default function Hero() {
           <motion.div variants={itemVariants} className="flex flex-col items-center gap-4">
             <motion.a
                 href="#projects"
-                className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-primary to-green-400 text-dark font-bold text-lg shadow-neon overflow-hidden"
+                className="group relative inline-flex items-center gap-4 px-12 py-5 rounded-full bg-gradient-to-r from-primary to-primary-dark text-white font-bold text-xl shadow-neon overflow-hidden"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
               {/* Button background animation */}
               <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-green-400 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className="absolute inset-0 bg-gradient-to-r from-primary-dark to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   initial={false}
               />
 
-              <span className="relative z-10">View My Projects</span>
+              <span className="relative z-10 text-xl">View My Projects</span>
               <motion.div
                   animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+                  transition={{ duration: 2, repeat: Infinity }}
                   className="relative z-10"
               >
                 →
@@ -251,25 +371,25 @@ export default function Hero() {
 
               {/* Ripple effect */}
               <motion.div
-                  className="absolute inset-0 bg-white/20 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500"
+                  className="absolute inset-0 bg-white/10 rounded-full scale-0 group-hover:scale-150 transition-transform duration-700"
                   initial={false}
               />
             </motion.a>
 
             {/* Scroll Indicator */}
             <motion.div
-                variants={floatingVariants}
-                animate="animate"
-                className="flex flex-col items-center gap-2 mt-8 opacity-60"
+                className="flex flex-col items-center gap-4 mt-12 opacity-70"
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
             >
-              <span className="text-sm text-foreground/60">Scroll to explore</span>
-              <FaArrowDown className="text-primary animate-bounce" />
+              <span className="text-base text-foreground/60 font-medium">Scroll to explore</span>
+              <FaArrowDown className="text-primary text-xl animate-bounce" />
             </motion.div>
           </motion.div>
         </motion.div>
 
-        {/* Enhanced Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/50 pointer-events-none" />
+        {/* Enhanced Background Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80 pointer-events-none" />
       </section>
   );
 }
