@@ -1,12 +1,55 @@
-# React + Vite
+# Portfolio Template (Next.js)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, customizable portfolio template built with Next.js. Use this template to showcase your projects, skills, and experience with a clean and professional design.
 
-Currently, two official plugins are available:
+## Fork This Portfolio Template 🚀
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Want to use this design for your own portfolio?  
+**Fork this repository!**  
+Personalize it with your information, projects, and style. If you improve the template or find bugs, contributions via pull requests are welcome!
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Built with [Next.js](https://nextjs.org/)
+- Responsive and mobile-friendly
+- Easy to customize structure and styles
+- Sections for About, Projects, Skills, Contact, and more
+- SEO-friendly
+- Modern UI and UX
+
+## Getting Started
+
+1. **Fork this repo** using the "Fork" button at the top right of this page.
+2. **Clone your fork**:
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/portfolio-next.git
+    cd portfolio-next
+    ```
+3. **Install dependencies**:
+    ```bash
+    npm install
+    ```
+4. **Run the development server**:
+    ```bash
+    npm run dev
+    ```
+5. Open [http://localhost:3000](http://localhost:3000) to view your portfolio.
+
+## Customization
+
+- Update the `data` files and components to reflect your personal information, projects, and skills.
+- Modify styles in the `styles` folder or use your favorite CSS framework.
+- Add, remove, or edit sections as needed.
+
+## Contributing
+
+Have suggestions or found a bug?  
+Feel free to open an issue or submit a pull request! All contributions are appreciated.
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+> Inspired by the developer community. Happy coding!
