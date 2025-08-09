@@ -7,7 +7,7 @@ const projects = [
 	{
 		title: "AI-PowerPoint Enhancer",
 		description: "An intelligent presentation enhancement tool that analyzes, scores, and improves PowerPoint slides using advanced AI. Features automatic content summarization, visual enhancement suggestions, and integration with Unsplash for high-quality imagery.",
-		image: "/project-ai-ppt.png",
+		image: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800",
 		github: "https://github.com/ammarhere02/ai-powerpoint-enhancer",
 		highlight: true,
 		technologies: ["Python", "OpenAI", "PowerPoint API", "REST API", "Unsplash API"],
@@ -17,7 +17,7 @@ const projects = [
 	{
 		title: "Movie Reservation System",
 		description: "A comprehensive backend solution for cinema management featuring advanced booking algorithms, real-time seat availability, secure payment processing, and comprehensive user authentication with role-based access control.",
-		image: "/project-movie-app.png",
+		image: "https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=800",
 		github: "https://github.com/ammarhere02/movie-reservation-app",
 		highlight: false,
 		technologies: ["Node.js", "Express", "Sequelize", "MySQL", "JWT"],
@@ -184,28 +184,28 @@ export default function Projects() {
 								<div className="flex flex-wrap gap-2">
 									{project.technologies.map((tech) => (
 										<motion.span
-											key={tech}
+						<div className="flex gap-4 mt-auto">
 											className="text-xs bg-secondary/50 text-foreground/80 px-2 py-1 rounded-md border border-accent/30 hover:border-primary/30 transition-colors duration-300"
 											whileHover={{ scale: 1.05 }}
 										>
 											{tech}
-										</motion.span>
+								className="flex-1 inline-flex items-center justify-center gap-3 px-6 py-3 bg-primary text-background font-bold rounded-xl hover:bg-primary/90 transition-all duration-300 group/btn shadow-lg"
 									))}
 								</div>
 							</div>
 
-							{/* Action Buttons */}
+								<FaGithub className="text-lg group-hover/btn:scale-110 transition-transform duration-300" />
 							<div className="flex gap-3 mt-auto">
 								<motion.a
 									href={project.github}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary text-dark font-semibold rounded-lg hover:bg-green-400 transition-all duration-300 group/btn"
+									className="px-6 py-3 border-2 border-primary/40 text-primary rounded-xl hover:bg-primary/10 transition-all duration-300 flex items-center gap-2 font-semibold"
 									whileHover={{ scale: 1.02 }}
 									whileTap={{ scale: 0.98 }}
 									aria-label={`View ${project.title} on GitHub`}
-								>
-									<FaGithub className="group-hover/btn:scale-110 transition-transform duration-300" />
+									<FaStar className="text-lg" />
+									<span>Star</span>
 									<span>View Code</span>
 								</motion.a>
 
@@ -224,7 +224,7 @@ export default function Projects() {
 
 						{/* Hover Glow Effect */}
 						<motion.div
-							className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+							className={`absolute top-6 right-6 z-20 px-4 py-2 rounded-full text-sm font-bold backdrop-blur-md ${project.highlight ? 'bg-primary/90 text-background' : 'bg-background/80 text-primary border border-primary/40'}`}
 							initial={false}
 						/>
 					</motion.div>

@@ -383,7 +383,7 @@ export default function Hero() {
                 transition={{ duration: 2, repeat: Infinity }}
             >
               <span className="text-base text-foreground/60 font-medium">Scroll to explore</span>
-              <FaArrowDown className="text-primary text-xl animate-bounce" />
+              Let's create something extraordinary together!
             </motion.div>
           </motion.div>
         </motion.div>

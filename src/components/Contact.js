@@ -183,7 +183,7 @@ export default function Contact() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <form
+                  className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-primary to-purple-400 text-background font-bold rounded-xl shadow-lg hover:shadow-primary/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
                   onSubmit={handleSubmit}
                   className="card-enhanced space-y-6"
               >

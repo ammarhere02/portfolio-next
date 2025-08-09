@@ -187,9 +187,9 @@ export default function Navbar() {
       <motion.nav
           className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
               scrolled
-                  ? "glass-effect border-b border-primary/20 shadow-2xl"
-                  : "bg-transparent"
-          } ${scrollDirection === "down" && scrolled ? "-translate-y-full" : "translate-y-0"}`}
+                  ? "bg-background/95 backdrop-blur-xl border-b border-primary/30 shadow-2xl"
+                  : "bg-background/80 backdrop-blur-md"
+          }`}
           initial={{ y: -100 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
@@ -198,7 +198,7 @@ export default function Navbar() {
           {/* Enhanced Logo */}
           <motion.a
               href="#hero"
-              className="font-black text-2xl tracking-tight text-gradient hover:scale-105 transition-all duration-300 relative group"
+              className="font-black text-2xl tracking-tight relative group"
               onClick={(e) => {
                 e.preventDefault();
                 handleLinkClick("#hero");
@@ -206,11 +206,11 @@ export default function Navbar() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
           >
-            <span className="relative z-10 bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
+            <span className="relative z-10 bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent font-bold">
               Ammar Khan
             </span>
             <motion.div
-                className="absolute -inset-2 bg-primary/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-sm"
+                className="absolute -inset-2 bg-primary/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-md"
                 layoutId="logo-bg"
             />
           </motion.a>
@@ -225,16 +225,23 @@ export default function Navbar() {
                       className={`nav-link relative font-semibold text-lg transition-all duration-300 group ${
                           activeSection === link.href.substring(1)
                               ? "text-primary active"
-                              : "text-foreground/70 hover:text-primary"
+                              : "text-foreground/80 hover:text-primary"
                       }`}
                       onClick={(e) => {
                         e.preventDefault();
                         handleLinkClick(link.href);
                       }}
-                      whileHover={{ y: -3, scale: 1.05 }}
+                      whileHover={{ y: -2, scale: 1.02 }}
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   >
                     {link.name}
+                    <motion.div
+                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: activeSection === link.href.substring(1) ? 1 : 0 }}
+                        whileHover={{ scaleX: 1 }}
+                        transition={{ duration: 0.3 }}
+                    />
                   </motion.a>
               ))}
             </div>
@@ -281,7 +288,7 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <motion.button
-              className="lg:hidden p-3 glass-card hover:bg-primary/10 rounded-xl transition-all duration-300 relative group"
+              className="lg:hidden p-3 bg-primary/10 hover:bg-primary/20 rounded-xl transition-all duration-300 relative group border border-primary/30"
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Toggle menu"
               whileTap={{ scale: 0.95 }}
@@ -304,7 +311,7 @@ export default function Navbar() {
         <AnimatePresence>
           {isOpen && (
               <motion.div
-                  className="lg:hidden glass-effect border-t border-primary/20 shadow-2xl"
+                  className="lg:hidden bg-background/98 backdrop-blur-xl border-t border-primary/30 shadow-2xl"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
@@ -317,8 +324,8 @@ export default function Navbar() {
                           href={link.href}
                           className={`block py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 ${
                               activeSection === link.href.substring(1)
-                                  ? "text-primary glass-card border-l-4 border-primary shadow-neon"
-                                  : "text-foreground/80 hover:text-primary hover:bg-primary/10"
+                                  ? "text-primary bg-primary/10 border-l-4 border-primary"
+                                  : "text-foreground/80 hover:text-primary hover:bg-primary/5"
                           }`}
                           onClick={(e) => {
                             e.preventDefault();
