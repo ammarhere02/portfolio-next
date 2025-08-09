@@ -142,7 +142,7 @@ export default function Contact() {
                       whileHover={{ x: 10 }}
                       transition={{ type: "spring", stiffness: 400 }}
                   >
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
+                    <div className="w-12 h-12 bg-primary/15 rounded-full flex items-center justify-center group-hover:bg-primary/25 transition-colors duration-300 border border-primary/20">
                       <FaComment className="text-primary text-lg" />
                     </div>
                     <div>
@@ -183,7 +183,7 @@ export default function Contact() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
             >
-                  className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-primary to-purple-400 text-background font-bold rounded-xl shadow-lg hover:shadow-primary/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+              <form
                   onSubmit={handleSubmit}
                   className="card-enhanced space-y-6"
               >
