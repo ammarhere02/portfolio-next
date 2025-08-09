@@ -1,5 +1,8 @@
 # Portfolio Template (Next.js)
 
+**Deployed Website:**  
+https://portfolio-nex-git-c23217-muhammad-ammar-khans-projects-08b40e81.vercel.app?_vercel_share=waD2SfMJvP6RyWwDHvtrQeirLqcCiZoJ
+
 A modern, customizable portfolio template built with Next.js. Use this template to showcase your projects, skills, and experience with a clean and professional design.
 
 ## Fork This Portfolio Template 🚀
