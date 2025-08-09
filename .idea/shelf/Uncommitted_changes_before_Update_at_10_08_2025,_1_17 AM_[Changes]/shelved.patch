@@ -1,0 +1,14 @@
+Index: postcss.config.js
+===================================================================
+diff --git a/postcss.config.js b/postcss.config.js
+deleted file mode 100644
+--- a/postcss.config.js	(revision f813f628c4e731430a52ef93df7897f7b6ab8d41)
++++ /dev/null	(revision f813f628c4e731430a52ef93df7897f7b6ab8d41)
+@@ -1,6 +0,0 @@
+-module.exports = {
+-  plugins: {
+-    '@tailwindcss/postcss': {},
+-    autoprefixer: {},
+-  },
+-};
+\ No newline at end of file
